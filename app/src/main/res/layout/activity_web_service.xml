@@ -19,16 +19,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:progressDrawable="@drawable/progress_bar_custom"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:indeterminateDrawable="@drawable/progress_bar_custom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/textView"
@@ -37,14 +39,12 @@
         android:layout_below="@+id/progressBar"
         android:layout_alignLeft="@+id/progressBar"
         android:text="0%"
-        android:textColor="@color/darkPurple"
         android:textSize="22dp"
-        tools:layout_editor_absoluteX="185dp"
-        tools:layout_editor_absoluteY="344dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.666" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
