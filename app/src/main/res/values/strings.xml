@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Group21</string>
+    <string name="home_string">Home</string>
+    <string name="firebase_database_string">Firebase Database</string>
+    <string name="web_service_string">Web Service</string>
+    <string name="upcoming_movies_string">Upcoming Movies</string>
+    <string name="search_string">Search</string>
+    <string name="release_year_hint">Release Year (eg. 2022)</string>
+    <string name="advanced_search_string">Advanced Search</string>
+    <string-array name="spinnerGenre">
+        <item>Genre Category</item>
+        <item>Comedy</item>
+        <item>Action</item>
+        <item>Drama</item>
+    </string-array>
 </resources>
