@@ -1,12 +1,14 @@
 package edu.northeastern.group21;
 
+import java.util.List;
+
 public class SearchResult {
 
     private int page;
     private String next;
     private int entries;
 
-    private MovieJson results;
+    private List<MovieJson> results;
 
     public int getPage() {
         return page;
@@ -32,11 +34,11 @@ public class SearchResult {
         this.entries = entries;
     }
 
-    public MovieJson getResults() {
+    public List<MovieJson> getResults() {
         return results;
     }
 
-    public void setResults(MovieJson results) {
+    public void setResults(List<MovieJson> results) {
         this.results = results;
     }
 }
