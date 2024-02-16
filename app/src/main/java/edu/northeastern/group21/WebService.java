@@ -104,11 +104,10 @@ public class WebService extends AppCompatActivity {
     public void onclick(View view) {
         int theId = view.getId();
 
-        if (theId == R.id.nextPage) {
-            // Click for Group Info
+        if (theId == R.id.buttonSearch) {
+            // Click for search item
             Intent intent = new Intent(WebService.this, MovieList.class);
             startActivity(intent);
-
         }
     }
 }
