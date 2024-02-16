@@ -7,7 +7,7 @@
     tools:context=".WebService">
 
     <TextView
-        android:id="@+id/headerText"
+        android:id="@+id/web_service_headerText"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@color/darkPurple"
@@ -27,10 +27,11 @@
         android:layout_height="128dp"
         android:indeterminateDrawable="@drawable/progress_bar_custom"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.361" />
 
     <TextView
         android:id="@+id/textView"
@@ -44,7 +45,19 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" />
+        app:layout_constraintVertical_bias="0.544" />
+
+    <Button
+        android:id="@+id/nextPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="584dp"
+        android:onClick="onclick"
+        android:text="NEXT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/web_service_headerText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

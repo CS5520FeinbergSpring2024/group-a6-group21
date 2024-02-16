@@ -2,8 +2,10 @@ package edu.northeastern.group21;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,7 +33,7 @@ public class WebService extends AppCompatActivity {
                     handler.post(new Runnable() {
                         public void run() {
                             progressBar.setProgress(progressStatus);
-                            textView.setText(progressStatus+"%");
+                            textView.setText(progressStatus + "%");
                         }
                     });
                     try {
@@ -43,5 +45,16 @@ public class WebService extends AppCompatActivity {
                 }
             }
         }).start();
+    }
+
+    public void onclick(View view) {
+        int theId = view.getId();
+
+        if (theId == R.id.nextPage) {
+            // Click for Group Info
+            Intent intent = new Intent(WebService.this, MovieList.class);
+            startActivity(intent);
+
+        }
     }
 }
