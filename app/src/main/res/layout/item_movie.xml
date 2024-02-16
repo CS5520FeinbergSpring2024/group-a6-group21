@@ -42,10 +42,10 @@
             android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/tv_DateAndTime"
+            android:id="@+id/tv_ReleaseYear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Release Date | Time"
+            android:text="Release Year"
             android:textColor="@color/darkPurple"
             android:textSize="18sp"/>
 

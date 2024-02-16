@@ -34,6 +34,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
+    implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     testImplementation("junit:junit:4.13.2")

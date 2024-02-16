@@ -3,6 +3,8 @@ package edu.northeastern.group21;
 import edu.northeastern.group21.Movie;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -36,20 +44,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        Movie movie = movies.get(position);
-        holder.tvMovieName.setText(movie.getName());
-        holder.tvGenres.setText(movie.getGenres());
-        holder.tvDateAndTime.setText(movie.getReleaseDate());
-        holder.tvRate.setText(movie.getRate());
+            Movie movie = movies.get(position);
+            holder.tvMovieName.setText(movie.getName());
+            holder.tvGenres.setText(movie.getGenres());
+            holder.tvReleaseYear.setText(movie.getReleaseDate());
+            holder.tvRate.setText(String.valueOf(movie.getRate()));
 
-        // Load the image using Glide or Picasso
+            // Use Glide to load the image from URL into the ImageView
         Glide.with(context)
                 .load(movie.getPosterUrl())
-                .error(R.drawable.frame17) // Display an error image if the load fails
                 .into(holder.ivPosterImage);
-
-
-    }
+        }
 
     @Override
     public int getItemCount() {
@@ -58,15 +63,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPosterImage;
-        TextView tvMovieName, tvGenres, tvDateAndTime, tvRate;
+        TextView tvMovieName, tvGenres, tvReleaseYear, tvRate;
+        ConstraintLayout constraintLayout;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             ivPosterImage = itemView.findViewById(R.id.ivPosterImage);
             tvMovieName = itemView.findViewById(R.id.tv_MovieName);
             tvGenres = itemView.findViewById(R.id.tv_Genres);
-            tvDateAndTime = itemView.findViewById(R.id.tv_DateAndTime);
+            tvReleaseYear = itemView.findViewById(R.id.tv_ReleaseYear);
             tvRate = itemView.findViewById(R.id.tv_Rate);
+            constraintLayout = itemView.findViewById(R.id.movieLists_recycler_view);
         }
     }
 }
