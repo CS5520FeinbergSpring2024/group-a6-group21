@@ -2,12 +2,14 @@ package edu.northeastern.group21;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -97,5 +99,16 @@ public class WebService extends AppCompatActivity {
         genreSearchLayout.setVisibility(View.INVISIBLE);
         advancedSearch.setVisibility(View.INVISIBLE);
         hideAdvancedSearch.setVisibility(View.INVISIBLE);
+    }
+
+    public void onclick(View view) {
+        int theId = view.getId();
+
+        if (theId == R.id.nextPage) {
+            // Click for Group Info
+            Intent intent = new Intent(WebService.this, MovieList.class);
+            startActivity(intent);
+
+        }
     }
 }
