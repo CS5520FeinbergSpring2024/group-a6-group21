@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/item_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="10dp"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/ivPosterImage"
+        android:layout_width="90dp"
+        android:layout_height="135dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        app:srcCompat="@color/mediumPurple" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_MovieName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Movie Name"
+            android:textColor="@color/darkPurple"
+            android:textAppearance="@android:style/TextAppearance.Large"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_Genres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Genres"
+            android:textColor="@color/darkPurple"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_ReleaseYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Release Year"
+            android:textColor="@color/darkPurple"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_Rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IMDBRate"
+            android:textColor="@color/darkPurple"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
