@@ -32,3 +32,5 @@ google-services.json
 # Android Profiling
 *.hprof
 
+# MacOS attribute files
+.DS_Store
