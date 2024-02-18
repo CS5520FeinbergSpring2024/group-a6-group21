@@ -13,6 +13,16 @@ public class MovieJson {
 
     private TitleType titleType;
 
+    private PrimaryImage primaryImage;
+
+    public PrimaryImage getPrimaryImage() {
+        return primaryImage;
+    }
+
+    public void setPrimaryImage(PrimaryImage primaryImage) {
+        this.primaryImage = primaryImage;
+    }
+
     // Constructor, getters, and setters
 
     public String getId() {
@@ -50,8 +60,6 @@ public class MovieJson {
 
 class TitleText {
     private String text;
-
-    // Constructor, getters, and setters
 
     public String getText() {
         return text;
@@ -96,6 +104,15 @@ class ReleaseDate {
 
 class TitleType {
     private String id;
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     // Constructor, getters, and setters
     public String getId() {
@@ -104,5 +121,27 @@ class TitleType {
 
     public void setId(String id) {
         this.id = id;
+    }
+}
+
+class PrimaryImage {
+    private String id;
+
+    private String url;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

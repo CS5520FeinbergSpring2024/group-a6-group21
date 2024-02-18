@@ -1,13 +1,30 @@
 package edu.northeastern.group21;
+
 import edu.northeastern.group21.Movie;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +32,17 @@ import java.util.List;
 public class MovieList extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RequestQueue requestQueue;
+
+    // added by Meng
+    private String searchYear;
+    private String selectedGenre;
+    private final String TAG = "-----MovieList----";
+    private List<MovieJson> movieJsonList = new ArrayList<>();
+
+    private Thread searchThread;
+    private Boolean apiAccessible = true;
+
+    List<Movie> mockMoviesList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,22 +56,111 @@ public class MovieList extends AppCompatActivity {
         requestQueue = VolleySingleton.getmInstance(this).getRequestQueue();
 
         fetchMovies();
-
-        // Mock data for testing
-        List<Movie> mockMoviesList = new ArrayList<>();
-        mockMoviesList.add(new Movie("Minions & More 1", "TV", "2022 | 48 min", 6.5, "https://www.filmofilia.com/wp-content/uploads/2013/06/DESPICABLE-ME-2-Phil-The-Minion-Poster.jpg"));
-        mockMoviesList.add(new Movie("Avatar ", "TV", "2022 | 48 min", 6.5, "https://m.media-amazon.com/images/M/MV5BYjhiNjBlODctY2ZiOC00YjVlLWFlNzAtNTVhNzM1YjI1NzMxXkEyXkFqcGdeQXVyMjQxNTE1MDA@._V1_.jpg"));
-        mockMoviesList.add(new Movie("Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb", "Drama", "1994 | 2h 22m", 8.8, "https://www.filmofilia.com/wp-content/uploads/2013/06/DESPICABLE-ME-2-Phil-The-Minion-Poster.jpg"));
-        mockMoviesList.add(new Movie("The Godfather ", "Drama", "1972 | 2h 55m", 9.2, "https://static.wikia.nocookie.net/international-entertainment-project/images/9/9b/The_Godfather_-_poster_%28English%29.jpg/revision/latest?cb=20231004233807.jpg"));
-        mockMoviesList.add(new Movie("Minions & More 1", "TV", "2022 | 48 min", 6.5, "https://www.filmofilia.com/wp-content/uploads/2013/06/DESPICABLE-ME-2-Phil-The-Minion-Poster.jpg"));
-        mockMoviesList.add(new Movie("Avatar ", "TV", "2022 | 48 min", 5.0, "https://m.media-amazon.com/images/M/MV5BYjhiNjBlODctY2ZiOC00YjVlLWFlNzAtNTVhNzM1YjI1NzMxXkEyXkFqcGdeQXVyMjQxNTE1MDA@._V1_.jpg"));
-        mockMoviesList.add(new Movie("Forrest Gump ", "Drama", "1994 | 2h 22m", 3.2, "https://www.filmofilia.com/wp-content/uploads/2013/06/DESPICABLE-ME-2-Phil-The-Minion-Poster.jpg"));
-        mockMoviesList.add(new Movie("The Godfather ", "Drama", "1972 | 2h 55m", 9.6, "https://static.wikia.nocookie.net/international-entertainment-project/images/9/9b/The_Godfather_-_poster_%28English%29.jpg/revision/latest?cb=20231004233807.jpg"));
-        MovieAdapter adapter = new MovieAdapter(this, mockMoviesList);
-        recyclerView.setAdapter(adapter);
     }
 
-    private void fetchMovies(){
+    private void fetchMovies() {
+        searchThread = new Thread(() -> {
+            URL url = null;
+            HttpURLConnection conn = null;
+            BufferedReader bufferedReader = null;
+            try {
+                url = new URL(getFullUrl());
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("X-RapidAPI-Key", "565cb1aff7mshb7c1524ceda0bb9p139deajsn713776dec5cf");
+                conn.setRequestProperty("X-RapidAPI-Host", "moviesdatabase.p.rapidapi.com");
+                conn.setDoInput(true);
 
+                conn.connect();
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    apiAccessible = true;
+                    bufferedReader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    final String response = stringBuilder.toString();
+
+                    Gson gson = new Gson();
+                    SearchResult searchResult = gson.fromJson(response, SearchResult.class);
+                    movieJsonList = searchResult.getResults();
+                    Log.d(TAG, "movieJsonList: " + movieJsonList == null ? "null" : String.valueOf(movieJsonList.size()));
+                    for (MovieJson movieJson : movieJsonList) {
+                        String imageUrl = movieJson.getPrimaryImage() == null? "" : movieJson.getPrimaryImage().getUrl();
+
+                        // String name, String genres, String releaseYear, Double rating, String posterUrl
+                        mockMoviesList.add(new Movie(movieJson.getTitleText().getText(),
+                                movieJson.getTitleType().getText(),
+                                String.valueOf(movieJson.getReleaseDate().getYear()),
+                                0.0,
+                                imageUrl));
+                        Log.d(TAG, "___title: " + movieJson.getTitleText().getText() + ", " + movieJson.getReleaseDate().getYear());
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mockMoviesList.size() == 0) {
+                                showToast("No result");
+                            } else {
+                                MovieAdapter adapter = new MovieAdapter(MovieList.this, mockMoviesList);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        }
+                    });
+                } else {
+                    apiAccessible = false;
+                    showToast("Something wrong with the web services. Come back later.");
+                }
+            } catch (ProtocolException e) {
+                throw new RuntimeException(e);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } finally {
+                // Close the connections
+                if (conn != null) {
+                    conn.disconnect();
+                }
+                if (bufferedReader != null) {
+                    try {
+                        bufferedReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        searchThread.start();
+    }
+
+    private String getFullUrl() {
+        String baseUrl = "https://moviesdatabase.p.rapidapi.com/titles/x/upcoming?";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            searchYear = bundle.getString("year");
+            if (searchYear != null && !searchYear.isEmpty()) {
+                searchYear = "year=" + searchYear;
+            } else {
+                searchYear = "";
+            }
+            selectedGenre = bundle.getString("genre");
+            if (selectedGenre != null && !selectedGenre.equals("Genre Category")) {
+                selectedGenre = "&genre=" + selectedGenre;
+            } else {
+                selectedGenre = "";
+            }
+        }
+
+        String fullUrl = baseUrl + searchYear + selectedGenre;
+        Log.d(TAG, "getFullUrl: " + fullUrl);
+        return fullUrl;
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(MovieList.this, message, Toast.LENGTH_SHORT).show();
     }
 }
