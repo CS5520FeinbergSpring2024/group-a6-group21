@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -47,6 +48,8 @@ public class MovieList extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    private int searchProgress = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +61,29 @@ public class MovieList extends AppCompatActivity {
 
         requestQueue = VolleySingleton.getmInstance(this).getRequestQueue();
 
-//        progressBar = (ProgressBar) findViewById(R.id.progressBarOnList);
-
-        fetchMovies();
+        progressBar = (ProgressBar) findViewById(R.id.progressBarOnList);
+        progressBar.setVisibility(View.VISIBLE);
+        SearchThread mt = new SearchThread();
+        Thread mt1 = new Thread(mt, "Service");
+        mt.start();
     }
 
-    private void fetchMovies() {
-        searchThread = new Thread(() -> {
+    private class SearchThread extends Thread {
+        @Override
+        public void run(){
+            // update the progress for progress bar
+            while(searchProgress<100){
+                searchProgress++;
+                android.os.SystemClock.sleep(10);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setProgress(searchProgress);
+                    }
+                });
+            }
+
+            // call third-party api
             URL url = null;
             HttpURLConnection conn = null;
             BufferedReader bufferedReader = null;
@@ -104,12 +123,14 @@ public class MovieList extends AppCompatActivity {
                         Log.d(TAG, "___title: " + movieJson.getTitleText().getText() + ", " + movieJson.getReleaseDate().getYear());
                     }
 
+                    // update UI
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (mockMoviesList.size() == 0) {
                                 showToast("No result");
                             } else {
+                                progressBar.setVisibility(View.INVISIBLE);
                                 MovieAdapter adapter = new MovieAdapter(MovieList.this, mockMoviesList);
                                 recyclerView.setAdapter(adapter);
                             }
@@ -138,6 +159,12 @@ public class MovieList extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    private void fetchMovies() {
+        searchThread = new Thread(() -> {
+
         });
         searchThread.start();
     }
