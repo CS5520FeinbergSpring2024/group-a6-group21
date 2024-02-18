@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +45,8 @@ public class MovieList extends AppCompatActivity {
 
     List<Movie> mockMoviesList = new ArrayList<>();
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,8 @@ public class MovieList extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         requestQueue = VolleySingleton.getmInstance(this).getRequestQueue();
+
+//        progressBar = (ProgressBar) findViewById(R.id.progressBarOnList);
 
         fetchMovies();
     }
