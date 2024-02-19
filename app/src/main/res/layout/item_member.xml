@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/ivMemberPhoto"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="87dp"
+            android:layout_height="85dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/person" />
 

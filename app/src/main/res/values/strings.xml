@@ -4,8 +4,9 @@
     <string name="firebase_database_string">Firebase Database</string>
     <string name="web_service_string">Web Service</string>
     <string name="upcoming_movies_string">Upcoming Movies</string>
+    <string name="sub_title_string">Your 2024 and Beyond movie guide</string>
     <string name="search_string">Search</string>
-    <string name="release_year_hint">Release Year (eg. 2022)</string>
+    <string name="release_year_hint">Release Year (eg. 2025)</string>
     <string name="advanced_search_string">Advanced Search</string>
     <string-array name="spinnerGenre">
         <item>Genre Category</item>
