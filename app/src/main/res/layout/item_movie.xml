@@ -31,7 +31,8 @@
             android:text="Movie Name"
             android:textColor="@color/darkPurple"
             android:textAppearance="@android:style/TextAppearance.Large"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/tv_Genres"
