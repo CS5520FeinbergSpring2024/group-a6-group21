@@ -39,10 +39,10 @@ public class GroupInfo extends AppCompatActivity {
         setContentView(R.layout.activity_group_info);
 
         // Create your group members
-        GroupMember member1 = new GroupMember("Anjing Huang", "Guitarist");
-        GroupMember member2 = new GroupMember("Jiaxu Zhang", "Vocalist");
-        GroupMember member3 = new GroupMember("Meng Wang", "Drummer");
-        GroupMember member4 = new GroupMember("Xiaoti Hu", "Bassist");
+        GroupMember member1 = new GroupMember("Anjing Huang", "-");
+        GroupMember member2 = new GroupMember("Jiaxu Zhang", "-");
+        GroupMember member3 = new GroupMember("Meng Wang", "-");
+        GroupMember member4 = new GroupMember("Xiaoti Hu", "-");
 
         // Set the data for each card
         setGroupMemberData((CardView) findViewById(R.id.memberCard1), member1);
