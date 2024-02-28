@@ -32,8 +32,21 @@ public class SentStickersAdapter extends RecyclerView.Adapter<SentStickersAdapte
     @Override
     public void onBindViewHolder(@NonNull ReceivedStickerHolder holder, int position) {
         SentSticker sentSticker = sentStickers.get(position);
-        holder.stickerImage.setImageResource(R.drawable.frame1);
-        holder.stickerCount.setText(String.valueOf(sentSticker.getCount()));
+        int sentStickerID = sentSticker.getStickerID();
+        if(sentStickerID == 1) {
+            holder.stickerImage.setImageResource(R.drawable.mexico);
+        } else if(sentStickerID == 2) {
+            holder.stickerImage.setImageResource(R.drawable.sahara);
+        } else if(sentStickerID == 3) {
+            holder.stickerImage.setImageResource(R.drawable.sydney);
+        } else if(sentStickerID == 4) {
+            holder.stickerImage.setImageResource(R.drawable.toronto);
+        } else if(sentStickerID == 5) {
+            holder.stickerImage.setImageResource(R.drawable.turkey);
+        } else if(sentStickerID == 6) {
+            holder.stickerImage.setImageResource(R.drawable.washington);
+        }
+        holder.stickerCount.setText(String.valueOf(sentSticker.getStickerCount()));
     }
 
     @Override

@@ -11,19 +11,19 @@ public class SentSticker {
         this.stickerCount = count;
     }
 
-    public int getSticker() {
+    public int getStickerID() {
         return stickerID;
     }
 
-    public void setSticker(int sticker) {
-        this.stickerID = sticker;
+    public void setStickerID(int stickerID) {
+        this.stickerID = stickerID;
     }
 
-    public int getCount() {
+    public int getStickerCount() {
         return stickerCount;
     }
 
-    public void setCount(int count) {
-        this.stickerCount = count;
+    public void setStickerCount(int stickerCount) {
+        this.stickerCount = stickerCount;
     }
 }
