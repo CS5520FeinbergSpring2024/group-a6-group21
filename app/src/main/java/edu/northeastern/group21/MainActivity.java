@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         } else if (theId == R.id.button_Firebase) {
             // Click for A7
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
         }
     }
 }
