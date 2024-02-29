@@ -6,6 +6,10 @@ public class SentSticker {
     private int stickerID;
     private int stickerCount;
 
+    public SentSticker(){
+
+    }
+
     public SentSticker(int sticker, int count) {
         this.stickerID = sticker;
         this.stickerCount = count;
