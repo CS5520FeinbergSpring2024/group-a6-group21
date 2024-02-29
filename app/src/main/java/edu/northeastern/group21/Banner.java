@@ -28,28 +28,8 @@ public class Banner extends AppCompatActivity {
         StickerAdapter adapter = new StickerAdapter(images);
         viewPager.setAdapter(adapter);
 
-
         viewPager.setOffscreenPageLimit(2);
-        viewPager.setPageTransformer((page, position) -> {
-            final float minScale = 0.85f;
-            final float maxScale = 1f;
-            final float scaleFactor = minScale + (1 - Math.abs(position)) * (maxScale - minScale);
-
-            page.setScaleX(scaleFactor);
-            page.setScaleY(scaleFactor);
-
-            if (position < -1) {
-                page.setAlpha(0f);
-            } else if (position <= 1) {
-                // Modify alpha based on position
-                page.setAlpha(Math.max(0.4f, 1 - Math.abs(position)));
-            } else {
-                page.setAlpha(0f);
-            }
-        });
-
+        viewPager.setPageTransformer(new MarginPageTransformer(150));
     }
-
-
 
 }
