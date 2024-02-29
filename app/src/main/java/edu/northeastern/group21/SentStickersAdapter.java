@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class SentStickersAdapter extends RecyclerView.Adapter<SentStickersAdapter.ReceivedStickerHolder> {
+public class SentStickersAdapter extends RecyclerView.Adapter<SentStickersAdapter.SentStickerHolder> {
 
     private final List<SentSticker> sentStickers;
-    private Context context;
+    private final Context context;
 
     public SentStickersAdapter(List<SentSticker> sentStickers, Context context) {
         this.sentStickers = sentStickers;
@@ -24,13 +24,13 @@ public class SentStickersAdapter extends RecyclerView.Adapter<SentStickersAdapte
 
     @NonNull
     @Override
-    public ReceivedStickerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SentStickerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_sent_sticker, parent, false);
-        return new ReceivedStickerHolder(view);
+        return new SentStickerHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReceivedStickerHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SentStickerHolder holder, int position) {
         SentSticker sentSticker = sentStickers.get(position);
         int sentStickerID = sentSticker.getStickerID();
         if(sentStickerID == 1) {
@@ -54,11 +54,11 @@ public class SentStickersAdapter extends RecyclerView.Adapter<SentStickersAdapte
         return sentStickers.size();
     }
 
-    public static class ReceivedStickerHolder extends RecyclerView.ViewHolder {
+    public static class SentStickerHolder extends RecyclerView.ViewHolder {
         private ImageView stickerImage;
         private TextView stickerCount;
 
-        public ReceivedStickerHolder(@NonNull View itemView) {
+        public SentStickerHolder(@NonNull View itemView) {
             super(itemView);
             this.stickerImage = itemView.findViewById(R.id.sentStickerImage);
             this.stickerCount = itemView.findViewById(R.id.sentStickerCount);
