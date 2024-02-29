@@ -65,7 +65,7 @@ public class Login extends AppCompatActivity {
 
     private void proceedToNextActivity(String userName) {
         // Intent to start next activity, passing the username as an extra
-        Intent intent = new Intent(Login.this, SentHistory.class);
+        Intent intent = new Intent(Login.this, ReceivedHistory.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
     }

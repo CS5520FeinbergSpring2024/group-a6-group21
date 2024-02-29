@@ -11,11 +11,11 @@ public class ReceivedSticker {
         this.receivedDate = receivedDate;
     }
 
-    public int getSticker() {
+    public int getStickerID() {
         return stickerID;
     }
 
-    public void setSticker(int stickerID) {
+    public void setStickerID(int stickerID) {
         this.stickerID = stickerID;
     }
 
