@@ -26,7 +26,6 @@ public class Login extends AppCompatActivity {
     DatabaseReference reference;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +66,6 @@ public class Login extends AppCompatActivity {
 
             }
         });
-
-
 
     }
 
