@@ -38,6 +38,14 @@ https://docs.google.com/document/d/1Z8i8EFDlK6MIIawu6CEVsSrGyE9FkDJ23iMix7_HD3M/
 
 #### Step 2: Create a New Branch for Your Work
 
+Ensure Your Local Branch Matches Your Target Branch, to check your current branch:
+
+```
+git branch
+```
+
+If you're not already on the right branch, switch to it (this will create the branch if it doesn't exist and you have changes to commit):
+
 ```
 git checkout -b feature_branch_name
 ```
