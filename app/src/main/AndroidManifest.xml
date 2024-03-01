@@ -40,6 +40,9 @@
         <activity
             android:name=".SentHistory"
             android:exported="false" />
+         <activity
+            android:name=".ReceivedHistory"
+            android:exported="false" />
         <activity
             android:name=".sendsticker.SendSticker"
             android:exported="false" />
