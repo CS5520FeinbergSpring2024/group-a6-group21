@@ -25,7 +25,7 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
 
-    Button sendSticker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +68,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        // added by Meng
-        sendSticker = findViewById(R.id.buttonSendSticker);
-        sendSticker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Login.this, SendSticker.class);
-                startActivity(intent);
-            }
-        });
+
 
     }
 
