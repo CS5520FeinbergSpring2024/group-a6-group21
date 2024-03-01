@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,17 +51,6 @@ public class SentHistory extends AppCompatActivity {
         //Retrieve current user data
         retrieveUserSentHistory();
         Log.v(TAG,"retrieveUserSentHistory Function Ran");
-
-//        // added by Meng
-//        sendSticker = findViewById(R.id.buttonSendSticker);
-//        sendSticker.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(SentHistory.this, SendSticker.class);
-//                intent.putExtra("userName", curUserName);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     protected void retrieveUserSentHistory() {
@@ -90,13 +80,15 @@ public class SentHistory extends AppCompatActivity {
     }
 
     protected void init() {
-        if(sentStickers != null) {
+        if(sentStickers.size() != 0) {
             //Initialize recycler view
             sentStickerRecyclerView = findViewById(R.id.sticker_recycler_view);
             sentStickerRecyclerView.setHasFixedSize(true);
             sentStickerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             sentStickersAdapter = new SentStickersAdapter(sentStickers, this);
             sentStickerRecyclerView.setAdapter(sentStickersAdapter);
+        } else {
+            Toast.makeText(this, "No stickers have been sent yet", Toast.LENGTH_LONG).show();
         }
     }
 }
