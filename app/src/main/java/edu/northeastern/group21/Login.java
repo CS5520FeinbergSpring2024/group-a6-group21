@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -36,9 +37,17 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final String name = username.getText().toString();
+                String name = username.getText().toString();
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
+
+                disconnectCurrentUser();
+
+                //username can't be empty
+                if (name.isEmpty()) {
+                    Toast.makeText(Login.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
@@ -63,12 +72,40 @@ public class Login extends AppCompatActivity {
         });
     }
 
+
     private void proceedToNextActivity(String userName) {
+        DatabaseReference userRef = reference.child(userName);
+
+        // When logging in, store the username
+        SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("LastLoggedInUser", userName);
+        editor.apply();
+
+        userRef.child("online").setValue(true);
+        userRef.child("online").onDisconnect().setValue(false);
+
         // Intent to start next activity, passing the username as an extra
         Intent intent = new Intent(Login.this, ReceivedHistory.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
     }
 
+    private void disconnectCurrentUser() {
+        // Create a SharedPreference
+        SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        // Read last username
+        String currentUserName = sharedPref.getString("LastLoggedInUser", null);
+        if (currentUserName != null) {
+            DatabaseReference userRef = database.getReference("users").child(currentUserName);
+            userRef.child("online").setValue(false);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        disconnectCurrentUser(); // Call this method before the super method
+        super.onBackPressed();
+    }
 
 }
