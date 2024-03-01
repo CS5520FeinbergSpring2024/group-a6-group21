@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import java.util.Objects;
 
 import edu.northeastern.group21.Login;
 import edu.northeastern.group21.R;
+import edu.northeastern.group21.ReceivedHistory;
 import edu.northeastern.group21.ReceivedSticker;
 import edu.northeastern.group21.SentHistory;
 import edu.northeastern.group21.SentSticker;
@@ -58,6 +60,9 @@ public class SendSticker extends AppCompatActivity {
 
     private Integer selectedImageId = null;
     private String selectImageName;
+
+    private Button btnSentHistory;
+
 
 
     @Override
@@ -90,6 +95,8 @@ public class SendSticker extends AppCompatActivity {
         imageView6 = findViewById(R.id.imageView23);
 
         bindListenerToImageView();
+
+
 
     }
 
@@ -156,6 +163,7 @@ public class SendSticker extends AppCompatActivity {
 
                     // Set the new record under the "user2" node
                     receiverRef.child("receivedStickers").child(String.valueOf(newRecordId)).setValue(receivedSticker);
+                    sendToast("Send Successfully");
                 }
 
                 @Override
@@ -165,9 +173,9 @@ public class SendSticker extends AppCompatActivity {
             });
 
 
-            Intent intent = new Intent(SendSticker.this, SentHistory.class);
-            intent.putExtra("userName", currentUserName);
-            startActivity(intent);
+//            Intent intent = new Intent(SendSticker.this, SentHistory.class);
+//            intent.putExtra("userName", currentUserName);
+//            startActivity(intent);
 
         }
     }
@@ -297,6 +305,20 @@ public class SendSticker extends AppCompatActivity {
                 selectImageName = "washington";
             }
         });
+    }
+
+    public void onClickSentHistory(View view) {
+        // Intent to start next activity, passing the username as an extra
+        Intent intent = new Intent(SendSticker.this, SentHistory.class);
+        intent.putExtra("userName", currentUserName);
+        startActivity(intent);
+    }
+
+    public void onClickReceivedHistory(View view) {
+        // Intent to start next activity, passing the username as an extra
+        Intent intent = new Intent(SendSticker.this, ReceivedHistory.class);
+        intent.putExtra("userName", currentUserName);
+        startActivity(intent);
     }
 
     private void sendToast(String msg) {

@@ -25,11 +25,6 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> ab8368e (complete sendSticker page, impl send sticker)
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +70,7 @@ public class Login extends AppCompatActivity {
 
     private void proceedToNextActivity(String userName) {
         // Intent to start next activity, passing the username as an extra
-        Intent intent = new Intent(Login.this, ReceivedHistory.class);
+        Intent intent = new Intent(Login.this, SendSticker.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
     }

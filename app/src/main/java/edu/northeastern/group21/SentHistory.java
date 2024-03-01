@@ -51,16 +51,16 @@ public class SentHistory extends AppCompatActivity {
         retrieveUserSentHistory();
         Log.v(TAG,"retrieveUserSentHistory Function Ran");
 
-        // added by Meng
-        sendSticker = findViewById(R.id.buttonSendSticker);
-        sendSticker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SentHistory.this, SendSticker.class);
-                intent.putExtra("userName", curUserName);
-                startActivity(intent);
-            }
-        });
+//        // added by Meng
+//        sendSticker = findViewById(R.id.buttonSendSticker);
+//        sendSticker.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SentHistory.this, SendSticker.class);
+//                intent.putExtra("userName", curUserName);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     protected void retrieveUserSentHistory() {
