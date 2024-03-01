@@ -25,6 +25,10 @@ public class Login extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ab8368e (complete sendSticker page, impl send sticker)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
