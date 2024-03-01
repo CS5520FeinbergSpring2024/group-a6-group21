@@ -1,6 +1,6 @@
 # SmartSpendMax
 
-Group 21: Anjing Huang | Jiaxu Zhang | Meng Wang | Xiaoti Hu
+Group 21: Aijing Huang | Jiaxu Zhang | Meng Wang | Xiaoti Hu
 
 ### Project Overview
 

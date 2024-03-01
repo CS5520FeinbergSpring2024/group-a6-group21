@@ -1,7 +1,10 @@
 package edu.northeastern.group21;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.northeastern.group21.sendsticker.SendSticker;
+
 public class SentHistory extends AppCompatActivity {
 
     private String curUserName;
@@ -30,6 +35,8 @@ public class SentHistory extends AppCompatActivity {
     private List<SentSticker> sentStickers;
     private FirebaseDatabase mDatabase;
     private final String TAG = "-----SentHistory----";
+
+    private Button sendSticker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,17 @@ public class SentHistory extends AppCompatActivity {
         //Retrieve current user data
         retrieveUserSentHistory();
         Log.v(TAG,"retrieveUserSentHistory Function Ran");
+
+//        // added by Meng
+//        sendSticker = findViewById(R.id.buttonSendSticker);
+//        sendSticker.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(SentHistory.this, SendSticker.class);
+//                intent.putExtra("userName", curUserName);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     protected void retrieveUserSentHistory() {

@@ -12,6 +12,9 @@ public class User {
     @PropertyName("sentStickers")
     private List<SentSticker> sentStickers;
 
+    @PropertyName("online")
+    private Boolean online;
+
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
@@ -24,6 +27,13 @@ public class User {
         this.userName = userName;
         this.receivedStickers = receivedStickers;
         this.sentStickers = sentStickers;
+    }
+
+    public User(String userName, List<ReceivedSticker> receivedStickers, List<SentSticker> sentStickers, Boolean online) {
+        this.userName = userName;
+        this.receivedStickers = receivedStickers;
+        this.sentStickers = sentStickers;
+        this.online = online;
     }
 
     public String getUserName() {
@@ -48,5 +58,13 @@ public class User {
 
     public void setSentStickers(List<SentSticker> sentStickers) {
         this.sentStickers = sentStickers;
+    }
+
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
     }
 }

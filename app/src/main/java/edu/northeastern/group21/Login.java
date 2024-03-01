@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import edu.northeastern.group21.sendsticker.SendSticker;
 
 public class Login extends AppCompatActivity {
 
@@ -32,10 +33,12 @@ public class Login extends AppCompatActivity {
         username = findViewById(R.id.editTextUserName);
         loginButton = findViewById(R.id.buttonLogin);
 
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                System.out.println("onclick");
                 final String name = username.getText().toString();
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
@@ -43,6 +46,7 @@ public class Login extends AppCompatActivity {
                reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
                    @Override
                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                       System.out.println("onDataChange");
                        if(snapshot.exists()){
                            proceedToNextActivity(name);
                        } else{
@@ -61,11 +65,12 @@ public class Login extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void proceedToNextActivity(String userName) {
         // Intent to start next activity, passing the username as an extra
-        Intent intent = new Intent(Login.this, ReceivedHistory.class);
+        Intent intent = new Intent(Login.this, SendSticker.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
     }

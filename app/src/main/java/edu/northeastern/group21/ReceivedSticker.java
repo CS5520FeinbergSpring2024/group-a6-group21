@@ -5,6 +5,9 @@ public class ReceivedSticker {
     private String receivedFrom;
     private String receivedDate;
 
+    public ReceivedSticker() {
+    }
+
     public ReceivedSticker(int stickerID, String receivedFrom, String receivedDate) {
         this.stickerID = stickerID;
         this.receivedFrom = receivedFrom;
