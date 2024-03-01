@@ -49,23 +49,23 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-               reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(@NonNull DataSnapshot snapshot) {
-                       if(snapshot.exists()){
-                           proceedToNextActivity(name);
-                       } else{
-                           reference.child(name).setValue(new User(name));
-                           proceedToNextActivity(name);
-                       }
+                reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            proceedToNextActivity(name);
+                        } else{
+                            reference.child(name).setValue(new User(name));
+                            proceedToNextActivity(name);
+                        }
 
-                   }
+                    }
 
-                   @Override
-                   public void onCancelled(@NonNull DatabaseError error) {
-                       Toast.makeText(Login.this, "Database error", Toast.LENGTH_SHORT).show();
-                   }
-               });
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(Login.this, "Database error", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
             }

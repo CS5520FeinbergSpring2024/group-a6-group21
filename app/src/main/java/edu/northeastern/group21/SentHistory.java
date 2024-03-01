@@ -1,7 +1,11 @@
 package edu.northeastern.group21;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import edu.northeastern.group21.sendsticker.SendSticker;
+
 public class SentHistory extends AppCompatActivity {
 
     private String curUserName;
@@ -30,6 +36,8 @@ public class SentHistory extends AppCompatActivity {
     private List<SentSticker> sentStickers;
     private FirebaseDatabase mDatabase;
     private final String TAG = "-----SentHistory----";
+
+    private Button sendSticker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +80,15 @@ public class SentHistory extends AppCompatActivity {
     }
 
     protected void init() {
-        if(sentStickers != null) {
+        if(sentStickers.size() != 0) {
             //Initialize recycler view
             sentStickerRecyclerView = findViewById(R.id.sticker_recycler_view);
             sentStickerRecyclerView.setHasFixedSize(true);
             sentStickerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             sentStickersAdapter = new SentStickersAdapter(sentStickers, this);
             sentStickerRecyclerView.setAdapter(sentStickersAdapter);
+        } else {
+            Toast.makeText(this, "No stickers have been sent yet", Toast.LENGTH_LONG).show();
         }
     }
 }

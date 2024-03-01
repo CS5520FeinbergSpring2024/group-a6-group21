@@ -2,6 +2,7 @@ package edu.northeastern.group21;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,12 +65,14 @@ public class ReceivedHistory extends AppCompatActivity {
     }
 
     protected void init() {
-        if(receivedStickers != null) {
+        if(receivedStickers.size() != 0) {
             receivedStickerRecyclerView = findViewById(R.id.sticker_recycler_view);
             receivedStickerRecyclerView.setHasFixedSize(true);
             receivedStickerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             receivedStickersAdapter = new ReceivedStickersAdapter(receivedStickers, this);
             receivedStickerRecyclerView.setAdapter(receivedStickersAdapter);
+        } else {
+            Toast.makeText(this, "Not received any stickers yet", Toast.LENGTH_LONG).show();
         }
     }
 }
