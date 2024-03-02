@@ -3,6 +3,7 @@ package edu.northeastern.group21.sendsticker;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -45,10 +46,12 @@ public class SendSticker extends AppCompatActivity {
 
     private DatabaseReference usersRef;
     private List<User> onlineUserList = new ArrayList<>();
+    private List<String> allUserName = new ArrayList<>();
     private Spinner onlineUserSpinner;
 
     private String currentUserName = "";
-    private User selectedUser = null;
+//    private User selectedUser = null;
+    private String selectedUserName = "";
 
     private ImageView imageView1;
     private ImageView imageView2;
@@ -61,20 +64,11 @@ public class SendSticker extends AppCompatActivity {
     private Integer selectedImageId = null;
     private String selectImageName;
 
-    private Button btnSentHistory;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_sticker);
 
-
-        // test firebase connection 1
-//        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("message");
-//        System.out.println("send sticker oncreate 1");
-//        myRef.setValue("Hello, World!");
         usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         // get current username
@@ -82,7 +76,8 @@ public class SendSticker extends AppCompatActivity {
 
         //spinner
         onlineUserSpinner = findViewById(R.id.spinnerOnlineUser);
-        getOnlineUsers();
+//        getOnlineUsers();
+        getAllUsers();
         bindListenerToSpinner();
 
         //show stickers
@@ -95,18 +90,15 @@ public class SendSticker extends AppCompatActivity {
         imageView6 = findViewById(R.id.imageView23);
 
         bindListenerToImageView();
-
-
-
     }
 
     public void toSendSticker(View view) {
-        Log.d(TAG, "toSendSticker: current user: " + currentUserName + ", sticker: " + selectedImageId + ", user: " + selectedUser.getUserName());
+//        Log.d(TAG, "toSendSticker: current user: " + currentUserName + ", sticker: " + selectedImageId + ", user: " + selectedUser.getUserName());
         if (selectedImageId == null) {
             sendToast("Please select a sticker by click a picture.");
         } else if (currentUserName == null || currentUserName.length() == 0) {
             sendToast("Please log in.");
-        } else if (selectedUser == null) {
+        } else if (selectedUserName == null || selectedUserName.length() == 0) {
             sendToast("Please choose a user");
         } else {
 //            // create a new sent record
@@ -117,28 +109,15 @@ public class SendSticker extends AppCompatActivity {
                     int stickerCount = 0;
                     for (DataSnapshot entrySnapshot : dataSnapshot.getChildren()) {
                         int key = Integer.parseInt(entrySnapshot.getKey());
-                        Log.d(TAG, "key:" + key);
                         if (key == selectedImageId) {
-//                            // java.lang.ClassCastException: java.util.HashMap cannot be cast to edu.northeastern.group21.SentSticker
-//                            SentSticker sentSticker = (SentSticker) entrySnapshot.getValue();
-//                            stickerCount = sentSticker.getStickerCount();
-//                            Log.d(TAG, "sentSticker id:" + sentSticker.getStickerID());
-//                            Log.d(TAG, "sentSticker: count = " + sentSticker.getStickerCount());
-
                             Map<String, Object> map = (Map<String, Object>) entrySnapshot.getValue();
                             stickerCount = ((Long) Objects.requireNonNull(map.get("stickerCount"))).intValue();
                             Log.d(TAG, "original count:" + stickerCount);
                         }
                     }
-
                     stickerCount++;
                     sentStickersRef.child(selectedImageId.toString()).child("stickerID").setValue(selectedImageId);
                     sentStickersRef.child(selectedImageId.toString()).child("stickerCount").setValue(stickerCount);
-
-                    // Get the current count of records
-//                    SentSticker sentSticker = dataSnapshot.getValue(SentSticker.class);
-//                    Log.d(TAG, "onDataChange: sentSticker:" + sentSticker.getStickerID());
-//                    Log.d(TAG, "onDataChange: count = " + sentSticker.getStickerCount());
                 }
 
                 @Override
@@ -148,20 +127,18 @@ public class SendSticker extends AppCompatActivity {
             });
 
             // create a new received record
-            DatabaseReference receiverRef = usersRef.child(selectedUser.getUserName());
+            DatabaseReference receiverRef = usersRef.child(selectedUserName);
             receiverRef.child("receivedStickers").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     long recordCount = dataSnapshot.getChildrenCount();
                     long newRecordId = recordCount + 1;
 
-                    // create a new receivedSticker object
                     Date currentDate = new Date();
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                     String formattedDate = dateFormat.format(currentDate);
                     ReceivedSticker receivedSticker = new ReceivedSticker(selectedImageId, currentUserName, formattedDate);
 
-                    // Set the new record under the "user2" node
                     receiverRef.child("receivedStickers").child(String.valueOf(newRecordId)).setValue(receivedSticker);
                     sendToast("Send Successfully");
                 }
@@ -171,43 +148,35 @@ public class SendSticker extends AppCompatActivity {
                     // Handle errors
                 }
             });
-
-
-//            Intent intent = new Intent(SendSticker.this, SentHistory.class);
-//            intent.putExtra("userName", currentUserName);
-//            startActivity(intent);
-
         }
     }
 
-    private void getOnlineUsers() {
-        // Query for online users
-        Query onlineUsersQuery = usersRef.orderByChild("online").equalTo(true);
+    private void getAllUsers() {
+        Query onlineUsersQuery = usersRef.orderByChild("userName");
 
         onlineUsersQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("query");
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    User user = userSnapshot.getValue(User.class);
-                    if (user != null) {
-                        onlineUserList.add(user);
-                    }
+                    Map<String, Object> map = (Map<String, Object>) userSnapshot.getValue();
+                    String userName = (Objects.requireNonNull(map.get("userName"))).toString();
+                    allUserName.add(userName);
+//                    Log.d(TAG, "username: " + userName);
                 }
 
                 // Populate the Spinner with the retrieved data
-                ArrayAdapter<User> adapter = new ArrayAdapter<User>(SendSticker.this, android.R.layout.simple_spinner_item, onlineUserList) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(SendSticker.this, android.R.layout.simple_spinner_item, allUserName) {
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         TextView textView = (TextView) super.getView(position, convertView, parent);
-                        textView.setText(onlineUserList.get(position).getUserName()); // Display the user name
+                        textView.setText(allUserName.get(position)); // Display the user name
                         return textView;
                     }
 
                     @Override
                     public View getDropDownView(int position, View convertView, ViewGroup parent) {
                         TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
-                        textView.setText(onlineUserList.get(position).getUserName()); // Display the user name
+                        textView.setText(allUserName.get(position)); // Display the user name
                         return textView;
                     }
                 };
@@ -227,11 +196,8 @@ public class SendSticker extends AppCompatActivity {
         onlineUserSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                // Get the selected item from the spinner
-                selectedUser = (User) parentView.getItemAtPosition(position);
-
-                // Do something with the selected item
-                Log.d("Spinner", "Selected user: " + selectedUser.getUserName());
+                selectedUserName = (String) parentView.getItemAtPosition(position);
+                Log.d("Spinner", "Selected userName: " + selectedUserName);
             }
 
             @Override
@@ -245,8 +211,6 @@ public class SendSticker extends AppCompatActivity {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle click event here
-                // For example, open a new activity or perform some action
                 selectedImageId = 1;
                 selectStickerTxt.setText("Chosen sticker: mexico");
             }
@@ -254,8 +218,6 @@ public class SendSticker extends AppCompatActivity {
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle click event here
-                // For example, open a new activity or perform some action
                 selectedImageId = 2;
                 selectStickerTxt.setText("Chosen sticker: sahara");
                 selectImageName = "sahara";
@@ -265,8 +227,6 @@ public class SendSticker extends AppCompatActivity {
         imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle click event here
-                // For example, open a new activity or perform some action
                 selectedImageId = 3;
                 selectStickerTxt.setText("Chosen sticker: sydney");
                 selectImageName = "sydney";
@@ -276,8 +236,6 @@ public class SendSticker extends AppCompatActivity {
         imageView4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle click event here
-                // For example, open a new activity or perform some action
                 selectedImageId = 4;
                 selectStickerTxt.setText("Chosen sticker: toronto");
                 selectImageName = "toronto";
@@ -287,8 +245,6 @@ public class SendSticker extends AppCompatActivity {
         imageView5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle click event here
-                // For example, open a new activity or perform some action
                 selectedImageId = 5;
                 selectStickerTxt.setText("Chosen sticker: turkey");
                 selectImageName = "turkey";
@@ -298,8 +254,6 @@ public class SendSticker extends AppCompatActivity {
         imageView6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle click event here
-                // For example, open a new activity or perform some action
                 selectedImageId = 6;
                 selectStickerTxt.setText("Chosen sticker: washington");
                 selectImageName = "washington";
@@ -308,21 +262,20 @@ public class SendSticker extends AppCompatActivity {
     }
 
     public void onClickSentHistory(View view) {
-        // Intent to start next activity, passing the username as an extra
         Intent intent = new Intent(SendSticker.this, SentHistory.class);
         intent.putExtra("userName", currentUserName);
         startActivity(intent);
     }
 
     public void onClickReceivedHistory(View view) {
-        // Intent to start next activity, passing the username as an extra
         Intent intent = new Intent(SendSticker.this, ReceivedHistory.class);
         intent.putExtra("userName", currentUserName);
         startActivity(intent);
     }
 
     private void sendToast(String msg) {
-        Toast.makeText(SendSticker.this, (CharSequence) msg, Toast.LENGTH_LONG).show();
+        Toast toast = Toast.makeText(SendSticker.this, msg, Toast.LENGTH_LONG);
+        toast.show();
     }
 
 }
