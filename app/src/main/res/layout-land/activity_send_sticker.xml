@@ -99,7 +99,7 @@
         android:id="@+id/spinnerText"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Online Users:"
+        android:text="User List:"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/selectedResultText"
         app:layout_constraintStart_toEndOf="@+id/imageGroup"
