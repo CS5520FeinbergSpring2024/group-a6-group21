@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.northeastern.group21.sendsticker.SendSticker;
+
 public class Login extends AppCompatActivity {
 
     EditText username;
@@ -37,16 +39,18 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = username.getText().toString();
+
+                String name = username.getText().toString().trim();
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
 
-                disconnectCurrentUser();
+                if(name != null && !name.isEmpty()){
+                    disconnectCurrentUser();
+                }
 
-                //username can't be empty
                 if (name.isEmpty()) {
                     Toast.makeText(Login.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
-                    return;
+                    return; // Exit the method early
                 }
 
                 reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -86,15 +90,14 @@ public class Login extends AppCompatActivity {
         userRef.child("online").onDisconnect().setValue(false);
 
         // Intent to start next activity, passing the username as an extra
-        Intent intent = new Intent(Login.this, ReceivedHistory.class);
+        Intent intent = new Intent(Login.this, SendSticker.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
     }
 
+    // To disconnect the current user, log-out current user if any
     private void disconnectCurrentUser() {
-        // Create a SharedPreference
         SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        // Read last username
         String currentUserName = sharedPref.getString("LastLoggedInUser", null);
         if (currentUserName != null) {
             DatabaseReference userRef = database.getReference("users").child(currentUserName);
