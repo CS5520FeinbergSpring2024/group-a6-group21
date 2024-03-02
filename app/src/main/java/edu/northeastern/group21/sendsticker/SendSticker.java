@@ -101,7 +101,7 @@ public class SendSticker extends AppCompatActivity {
     }
 
     public void toSendSticker(View view) {
-        Log.d(TAG, "toSendSticker: current user: " + currentUserName + ", sticker: " + selectedImageId + ", user: " + selectedUser.getUserName());
+//        Log.d(TAG, "toSendSticker: current user: " + currentUserName + ", sticker: " + selectedImageId + ", user: " + selectedUser.getUserName());
         if (selectedImageId == null) {
             sendToast("Please select a sticker by click a picture.");
         } else if (currentUserName == null || currentUserName.length() == 0) {
