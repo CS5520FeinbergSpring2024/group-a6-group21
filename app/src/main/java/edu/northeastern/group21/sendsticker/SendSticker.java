@@ -1,6 +1,14 @@
 package edu.northeastern.group21.sendsticker;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.HashMap;
 
 import edu.northeastern.group21.Login;
 import edu.northeastern.group21.R;
@@ -41,6 +51,9 @@ import edu.northeastern.group21.User;
 
 
 public class SendSticker extends AppCompatActivity {
+    private static final String CHANNEL_ID = "CHANNEL_ID";
+    private static final String CHANNEL_NAME = "CHANNEL_NAME";
+    private static final String CHANNEL_DESCRIPTION = "CHANNEL_DESCRIPTION";
 
     private final static String TAG = "----SendSticker----";
 
@@ -101,6 +114,10 @@ public class SendSticker extends AppCompatActivity {
         } else if (selectedUserName == null || selectedUserName.length() == 0) {
             sendToast("Please choose a user");
         } else {
+              // sent a sticker message to Firebase
+            sendStickerToUserB(selectedUser.getUserName(), selectedImageId, selectImageName);
+              // Assuming a successful send is displayed here
+            sendToast("Sticker sent successfully.");
 //            // create a new sent record
             DatabaseReference sentStickersRef = usersRef.child(currentUserName).child("sentStickers");
             sentStickersRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -140,6 +157,10 @@ public class SendSticker extends AppCompatActivity {
                     ReceivedSticker receivedSticker = new ReceivedSticker(selectedImageId, currentUserName, formattedDate);
 
                     receiverRef.child("receivedStickers").child(String.valueOf(newRecordId)).setValue(receivedSticker);
+                    sendToast("Send Successfully");
+
+                    // Assume selectImageName is the name of the sticker i want to display in the notification
+                    sendNotification(selectImageName);
                     sendToast("Send Successfully");
                 }
 
@@ -278,4 +299,55 @@ public class SendSticker extends AppCompatActivity {
         toast.show();
     }
 
+    private void sendStickerToUserB(String receiverUserId, int stickerId, String stickerName) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("stickers").child(receiverUserId);
+        String key = dbRef.push().getKey();
+
+        HashMap<String, Object> stickerInfo = new HashMap<>();
+        stickerInfo.put("from", currentUserName);
+        stickerInfo.put("stickerID", stickerId);
+        stickerInfo.put("stickerName", stickerName);
+        stickerInfo.put("timestamp", System.currentTimeMillis());
+
+        if (key != null) {
+            dbRef.child(key).setValue(stickerInfo)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Sticker sent successfully."))
+                    .addOnFailureListener(
+                            e -> Log.d(TAG, "Failed to send sticker.", e));
+        }
+    }
+
+
+    /**
+     * Create and show a notification for a newly sent sticker message
+     */
+    private void sendNotification(String stickerName) {
+        Intent intent = new Intent(this, SendSticker.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // Create the pending intent to launch the activity
+        @SuppressLint("UnspecifiedImmutableFlag")
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                1410, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        // Create the notification builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.frame1) // Applying small Sticker Resources
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.round_circle_24)) // Applying Large Icon Resources
+                .setContentTitle("You have a new sticker!")
+                .setContentText("Sticker name: " + stickerName) // Use Sticker Name
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setContentIntent(pendingIntent);
+
+        // Set the notification channel and build the notification
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        if (notificationManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES .O){
+                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+                notificationChannel.setDescription(CHANNEL_DESCRIPTION);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+            notificationManager.notify(0, builder.build());
+        }
+    }
 }
