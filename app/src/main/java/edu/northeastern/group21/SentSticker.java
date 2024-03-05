@@ -1,5 +1,7 @@
 package edu.northeastern.group21;
 
+import com.google.firebase.database.PropertyName;
+
 public class SentSticker {
     private int stickerID;
     private int stickerCount;
